@@ -121,6 +121,9 @@ export function processData(self: evolutionInstance, message: string): void {
 		} else if (line.startsWith('Config')) {
 			let confVersion = parseInt(lineSplit[1].trim())
 			if (confVersion !== self._deviceConfigIndex) {
+				self.log('info', `[Sennheiser EW][${self.config.host}] Got config index change from ${self._deviceConfigIndex} to ${confVersion}.`)              
+				// Update our stored conf version
+				self._deviceConfigIndex = confVersion
 				sendCommand(self, 'Frequency')
 				sendCommand(self, 'Name')
 				sendCommand(self, 'FirmwareRevision')
