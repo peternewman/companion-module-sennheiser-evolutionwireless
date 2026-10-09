@@ -12,7 +12,7 @@ function checkMessage(self: evolutionInstance, msg: Buffer, rinfo: { address: st
 			//if the remote address isn't our configured host, it's just some other device
 			self.log('info', `Ignoring UDP message from unknown source: ${rinfo.address}:${rinfo.port}`)
 		}
-	} catch (_err: any) {
+	} catch (err: any) {
 		self.log('error', `UDP error: ${err.message}`)
 	}
 }
@@ -106,7 +106,7 @@ export function processData(self: evolutionInstance, message: string): void {
 			}
 			variableObj['msg'] = line.replace('Msg', '').trim()
 		} else if (line.startsWith('Name')) {
-			self._deviceConfig.name = lineSplit[1].trim()
+			self._deviceConfig.name = line.replace('Name', '').trim()
 			variableObj['name'] = self._deviceConfig.name
 		} else if (line.startsWith('FirmwareRevision')) {
 			self._deviceConfig.firmwareRevision = lineSplit[1].trim()
