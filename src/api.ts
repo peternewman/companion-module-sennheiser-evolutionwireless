@@ -12,7 +12,7 @@ function checkMessage(self: evolutionInstance, msg: Buffer, rinfo: { address: st
 			//if the remote address isn't our configured host, it's just some other device
 			self.log('info', `Ignoring UDP message from unknown source: ${rinfo.address}:${rinfo.port}`)
 		}
-	} catch (_err: any) {
+	} catch (err: any) {
 		self.log('error', `UDP error: ${err.message}`)
 	}
 }
