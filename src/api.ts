@@ -106,7 +106,7 @@ export function processData(self: evolutionInstance, message: string): void {
 			}
 			variableObj['msg'] = line.replace('Msg', '').trim()
 		} else if (line.startsWith('Name')) {
-			self._deviceConfig.name = lineSplit[1].trim()
+			self._deviceConfig.name = line.replace('Name', '').trim()
 			variableObj['name'] = self._deviceConfig.name
 		} else if (line.startsWith('FirmwareRevision')) {
 			self._deviceConfig.firmwareRevision = lineSplit[1].trim()
