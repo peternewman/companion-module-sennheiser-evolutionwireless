@@ -4,16 +4,16 @@ import type { evolutionInstance } from './index.js'
 function checkMessage(self: evolutionInstance, msg: Buffer, rinfo: { address: string; port: number }): void {
 	try {
 		if (rinfo.address == self.config.host) {
-			self.log('debug', 'Got UDP message: ' + Buffer.from(msg).toString('hex'))
-			self.log('debug', 'Got UDP message ASCII: ' + Buffer.from(msg).toString())
+			if (self.config.verbose) {
+				self.log('debug', 'Got UDP message: ' + Buffer.from(msg).toString('hex'))
+			}
 			processData(self, Buffer.from(msg).toString())
 		} else {
 			//if the remote address isn't our configured host, it's just some other device
 			self.log('info', `Ignoring UDP message from unknown source: ${rinfo.address}:${rinfo.port}`)
 		}
 	} catch (_err: any) {
-//		self.log('error', `UDP error: ${err.message}`)
-		self.log('error', `UDP error`)
+		self.log('error', `UDP error: ${err.message}`)
 	}
 }
 
@@ -46,10 +46,11 @@ export function initConnection(self: evolutionInstance): void {
 			startStatusSubscription(self)
 		})
 
-		self._socket.on('message', (msg: Buffer) => {
-			console.log('got data')
-			processData(self, msg.toString())
-		})
+		// This is an unfiltered duplicate from to the UDP port, but possibly not for us
+		// self._socket.on('message', (msg: Buffer) => {
+		// 	console.log('got data: ' + msg.toString())
+		// 	processData(self, msg.toString())
+		// })
 
 		self._socket.on('status_change', (status: any, message: any) => {
 			console.log('status change', status, message)
@@ -107,6 +108,9 @@ export function processData(self: evolutionInstance, message: string): void {
 		} else if (line.startsWith('Name')) {
 			self._deviceConfig.name = lineSplit[1].trim()
 			variableObj['name'] = self._deviceConfig.name
+		} else if (line.startsWith('FirmwareRevision')) {
+			self._deviceConfig.firmwareRevision = lineSplit[1].trim()
+			variableObj['firmware_revision'] = self._deviceConfig.firmwareRevision
 		} else if (line.startsWith('Frequency')) {
 			self._deviceConfig.frequencyRaw = lineSplit[1].trim()
 			self._deviceConfig.frequency = `${self._deviceConfig.frequencyRaw.substring(
@@ -117,8 +121,12 @@ export function processData(self: evolutionInstance, message: string): void {
 		} else if (line.startsWith('Config')) {
 			let confVersion = parseInt(lineSplit[1].trim())
 			if (confVersion !== self._deviceConfigIndex) {
+				self.log('info', `[Sennheiser EW][${self.config.host}] Got config index change from ${self._deviceConfigIndex} to ${confVersion}.`)              
+				// Update our stored conf version
+				self._deviceConfigIndex = confVersion
 				sendCommand(self, 'Frequency')
 				sendCommand(self, 'Name')
+				sendCommand(self, 'FirmwareRevision')
 
 				if (self.config.deviceType === 'SR') {
 					sendCommand(self, 'Sensitivity')
