@@ -4,8 +4,9 @@ import type { evolutionInstance } from './index.js'
 function checkMessage(self: evolutionInstance, msg: Buffer, rinfo: { address: string; port: number }): void {
 	try {
 		if (rinfo.address == self.config.host) {
-			self.log('debug', 'Got UDP message: ' + Buffer.from(msg).toString('hex'))
-			self.log('debug', 'Got UDP message ASCII: ' + Buffer.from(msg).toString())
+			if (self.config.verbose) {
+				self.log('debug', 'Got UDP message: ' + Buffer.from(msg).toString('hex'))
+			}
 			processData(self, Buffer.from(msg).toString())
 		} else {
 			//if the remote address isn't our configured host, it's just some other device
@@ -45,10 +46,11 @@ export function initConnection(self: evolutionInstance): void {
 			startStatusSubscription(self)
 		})
 
-		self._socket.on('message', (msg: Buffer) => {
-			console.log('got data')
-			processData(self, msg.toString())
-		})
+		// This is an unfiltered duplicate from to the UDP port, but possibly not for us
+		// self._socket.on('message', (msg: Buffer) => {
+		// 	console.log('got data: ' + msg.toString())
+		// 	processData(self, msg.toString())
+		// })
 
 		self._socket.on('status_change', (status: any, message: any) => {
 			console.log('status change', status, message)
