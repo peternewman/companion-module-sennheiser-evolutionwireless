@@ -107,6 +107,9 @@ export function processData(self: evolutionInstance, message: string): void {
 		} else if (line.startsWith('Name')) {
 			self._deviceConfig.name = lineSplit[1].trim()
 			variableObj['name'] = self._deviceConfig.name
+		} else if (line.startsWith('FirmwareRevision')) {
+			self._deviceConfig.firmwareRevision = lineSplit[1].trim()
+			variableObj['firmware_revision'] = self._deviceConfig.firmwareRevision
 		} else if (line.startsWith('Frequency')) {
 			self._deviceConfig.frequencyRaw = lineSplit[1].trim()
 			self._deviceConfig.frequency = `${self._deviceConfig.frequencyRaw.substring(
@@ -119,6 +122,7 @@ export function processData(self: evolutionInstance, message: string): void {
 			if (confVersion !== self._deviceConfigIndex) {
 				sendCommand(self, 'Frequency')
 				sendCommand(self, 'Name')
+				sendCommand(self, 'FirmwareRevision')
 
 				if (self.config.deviceType === 'SR') {
 					sendCommand(self, 'Sensitivity')
