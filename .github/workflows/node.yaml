@@ -28,7 +28,7 @@ jobs:
           corepack enable
       - name: Prepare module
         run: |
-          yarn install
+          yarn install --dev
         env:
           CI: true
       - name: Build and check types
