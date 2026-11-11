@@ -40,10 +40,10 @@ describe('ModuleInstance', () => {
 	})
 
 	describe('processData', () => {
-		test('should handle mode response', async () => {
+		test('should handle mode response', () => {
 			// Invoke the method
 			const modeResponsePacket = Buffer.from([0x4d, 0x6f, 0x64, 0x65, 0x20, 0x31, 0x0d])
-			await processData(instance, modeResponsePacket.toString())
+			processData(instance, modeResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -52,10 +52,10 @@ describe('ModuleInstance', () => {
 		})
 
 		// TODO(Peter): Not yet implemented in the connection
-		/*test('should handle mute response', async () => {
+		/*test('should handle mute response', () => {
 			// Invoke the method
 			const muteResponsePacket = Buffer.from([0x4d, 0x75, 0x74, 0x65, 0x20, 0x31, 0x0d])
-			await processData(instance, muteResponsePacket.toString())
+			processData(instance, muteResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -63,13 +63,13 @@ describe('ModuleInstance', () => {
 			})
 		})*/
 
-		test('should handle firmware revision response', async () => {
+		test('should handle firmware revision response', () => {
 			// Invoke the method
 			const firmwareRevisionResponsePacket = Buffer.from([
 				0x46, 0x69, 0x72, 0x6d, 0x77, 0x61, 0x72, 0x65, 0x52, 0x65, 0x76, 0x69, 0x73, 0x69, 0x6f, 0x6e, 0x20,
 				0x31, 0x2e, 0x37, 0x2e, 0x30, 0x0d,
 			])
-			await processData(instance, firmwareRevisionResponsePacket.toString())
+			processData(instance, firmwareRevisionResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -77,12 +77,12 @@ describe('ModuleInstance', () => {
 			})
 		})
 
-		test('should handle sensitivity response', async () => {
+		test('should handle sensitivity response', () => {
 			// Invoke the method
 			const sensitivityResponsePacket = Buffer.from([
 				0x53, 0x65, 0x6e, 0x73, 0x69, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x20, 0x2d, 0x31, 0x38, 0x0d,
 			])
-			await processData(instance, sensitivityResponsePacket.toString())
+			processData(instance, sensitivityResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -90,13 +90,13 @@ describe('ModuleInstance', () => {
 			})
 		})
 
-		test('should handle equalizer response', async () => {
+		test('should handle equalizer response', () => {
 			// Invoke the method
 			const equalizerResponsePacket = Buffer.from([
 				0x45, 0x71, 0x75, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x72, 0x20, 0x30, 0x20, 0x30, 0x20, 0x30, 0x20, 0x30,
 				0x20, 0x30, 0x20, 0x30, 0x0d,
 			])
-			await processData(instance, equalizerResponsePacket.toString())
+			processData(instance, equalizerResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -109,13 +109,13 @@ describe('ModuleInstance', () => {
 			})
 		})
 
-		test('should handle frequency response', async () => {
+		test('should handle frequency response', () => {
 			// Invoke the method
 			const frequencyResponsePacket = Buffer.from([
 				0x46, 0x72, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x79, 0x20, 0x36, 0x32, 0x36, 0x31, 0x35, 0x30, 0x20,
 				0x31, 0x20, 0x31, 0x0d,
 			])
-			await processData(instance, frequencyResponsePacket.toString())
+			processData(instance, frequencyResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -123,10 +123,10 @@ describe('ModuleInstance', () => {
 			})
 		})
 
-		test('should handle config response, bigger value', async () => {
+		test('should handle config response, bigger value', () => {
 			// Invoke the method
 			const configResponsePacket = Buffer.from([0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x20, 0x31, 0x31, 0x0d])
-			await processData(instance, configResponsePacket.toString())
+			processData(instance, configResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({})
@@ -139,10 +139,10 @@ describe('ModuleInstance', () => {
 			expect(instance._deviceConfigIndex).toEqual(11)
 		})
 
-		test('should handle config response, same value', async () => {
+		test('should handle config response, same value', () => {
 			// Invoke the method
 			const configResponsePacket = Buffer.from([0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x20, 0x31, 0x30, 0x0d])
-			await processData(instance, configResponsePacket.toString())
+			processData(instance, configResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({})
@@ -150,10 +150,10 @@ describe('ModuleInstance', () => {
 			expect(instance._deviceConfigIndex).toEqual(10)
 		})
 
-		test('should handle config response, smaller value', async () => {
+		test('should handle config response, smaller value', () => {
 			// Invoke the method
 			const configResponsePacket = Buffer.from([0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x20, 0x31, 0x0d])
-			await processData(instance, configResponsePacket.toString())
+			processData(instance, configResponsePacket.toString())
 
 			// Assertions
 			// We need to fetch data again if it's smaller as it may have wrapped around!
@@ -167,13 +167,13 @@ describe('ModuleInstance', () => {
 			expect(instance._deviceConfigIndex).toEqual(1)
 		})
 
-		test('should handle multiple responses in one packet', async () => {
+		test('should handle multiple responses in one packet', () => {
 			// Invoke the method
 			const multipleResponsePacket = Buffer.from([
 				0x41, 0x46, 0x20, 0x30, 0x20, 0x30, 0x20, 0x30, 0x20, 0x30, 0x0d, 0x53, 0x74, 0x61, 0x74, 0x65, 0x73,
 				0x20, 0x31, 0x20, 0x31, 0x0d, 0x4d, 0x73, 0x67, 0x20, 0x52, 0x46, 0x5f, 0x4d, 0x75, 0x74, 0x65, 0x0d,
 			])
-			await processData(instance, multipleResponsePacket.toString())
+			processData(instance, multipleResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -188,12 +188,12 @@ describe('ModuleInstance', () => {
 			})
 		})
 
-		test('should handle name response', async () => {
+		test('should handle name response', () => {
 			// Invoke the method
 			const nameResponsePacket = Buffer.from([
 				0x4e, 0x61, 0x6d, 0x65, 0x20, 0x2a, 0x2a, 0x32, 0x30, 0x30, 0x30, 0x2a, 0x2a, 0x0d,
 			])
-			await processData(instance, nameResponsePacket.toString())
+			processData(instance, nameResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
@@ -201,12 +201,12 @@ describe('ModuleInstance', () => {
 			})
 		})
 
-		test('should handle name response with space', async () => {
+		test('should handle name response with space', () => {
 			// Invoke the method
 			const nameResponsePacket = Buffer.from([
 				0x4e, 0x61, 0x6d, 0x65, 0x20, 0x66, 0x6f, 0x6f, 0x20, 0x62, 0x61, 0x72, 0x0d,
 			])
-			await processData(instance, nameResponsePacket.toString())
+			processData(instance, nameResponsePacket.toString())
 
 			// Assertions
 			expect(instance.setVariableValues).toHaveBeenCalledWith({
